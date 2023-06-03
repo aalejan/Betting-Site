@@ -1,5 +1,5 @@
 // pages/sport/[id].tsx
-
+"use client";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
@@ -7,34 +7,33 @@ interface OddsData {
   // Define your data structure here
 }
 
-export default async function SportsPage({ searchParams }) {
-  const [oddsData, setOddsData] = useState(null);
-  const [error, setError] = useState(null);
-  console.log(searchParams.id);
-  const fetchData = async () => {
-    if (searchParams.id) {
-      try {
-        const response = await fetch(
-          `https://api.the-odds-api.com/v4/sports/${searchParams.id}/odds/?apiKey=${process.env.NEXT_PUBLIC_ODDS_API_KEY}&regions=us&markets=h2h`
-        );
-        console.log(response);
+export default function SportsPage({ searchParams }) {
+  const [oddsData, setOddsData] = useState<null | OddsData>(null);
+  const [error, setError] = useState<null | string>(null);
+  const id = searchParams.id;
 
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
+  useEffect(() => {
+    const fetchData = async () => {
+      if (id) {
+        try {
+          const response = await fetch(`/api/proxy/${id}`);
+
+          if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+          }
+
+          const data: OddsData = await response.json();
+          console.log(data);
+          setOddsData(data);
+        } catch (error) {
+          setError(error.message);
         }
-
-        const data: any = await response.json();
-        setOddsData(data);
-      } catch (error) {
-        console.log(error);
       }
-    }
-  };
-  console.log(searchParams.id);
-  console.log("hello");
+    };
 
-  fetchData();
+    fetchData();
+  }, [id]);
 
   // render your oddsData here
-  return <div>{}</div>;
+  return <div>{/* Render your data here */}</div>;
 }
