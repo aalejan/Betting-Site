@@ -6,7 +6,7 @@ export default function Nav() {
   const sports = ["mma_mixed_martial_arts", "soccer_epl", "baseball_mlb"];
 
   return (
-    <nav>
+    <nav className='pb-4'>
       {sports.map((sport) => (
         <Link
           key={sport}

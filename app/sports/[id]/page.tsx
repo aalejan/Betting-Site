@@ -44,18 +44,29 @@ export default function SportsPage({ searchParams }) {
               </h2>
               {odd.bookmakers.map((book) => (
                 <div key={book.key}>
-                  <h3>{book.title}</h3>
+                  <h3 className='font-bold'>{book.title}</h3>
                   {book.markets.map((market) => (
                     <div key={market.key}>
-                      <h4>{market.key}</h4>
-                      <div className='flex overflow-auto'>
+                      <h4 className=''>{market.key}</h4>
+                      <div className='flex overflow-auto gap-4 lg:gap-2'>
                         {market.outcomes.map((outcome) => (
-                          <div key={outcome.name}>
-                            <p className='text-base'>
-                              {outcome.name} - {outcome.price}
-                              {outcome.point && ` - Point: ${outcome.point}`}
-                            </p>
-                          </div>
+                          <>
+                            <div
+                              key={outcome.name}
+                              className='grid grid-rows-2'
+                            >
+                              <p className='text-base'>{outcome.name}</p>
+                              <p className='text-base '>{outcome.price}</p>
+                              {outcome.point != null ? (
+                                <p className='text-base'>
+                                  {outcome.point &&
+                                    `  Points: ${outcome.point}`}
+                                </p>
+                              ) : (
+                                ""
+                              )}
+                            </div>
+                          </>
                         ))}
                       </div>
                     </div>
