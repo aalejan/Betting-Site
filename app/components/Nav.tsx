@@ -3,7 +3,7 @@
 import Link from "next/link";
 
 export default function Nav() {
-  const sports = ["mma_mixed_martial_arts", "soccer_epl"];
+  const sports = ["mma_mixed_martial_arts", "soccer_epl", "baseball_mlb"];
 
   return (
     <nav>
