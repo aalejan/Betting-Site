@@ -3,10 +3,10 @@
 import Link from "next/link";
 
 export default function Nav() {
-  const sports = ["mma_mixed_martial_arts", "soccer_epl", "baseball_mlb"];
+  const sports = ["mma_mixed_martial_arts", "baseball_mlb", "basketball_nba"];
 
   return (
-    <nav className='pb-4'>
+    <nav className='pb-4 flex justify-between'>
       {sports.map((sport) => (
         <Link
           key={sport}
