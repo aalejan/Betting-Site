@@ -15,7 +15,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang='en'>
+    <html lang='en' data-theme='forest'>
       <body className='mx-4 lg:mx-44 '>
         <Nav />
         {children}
