@@ -1,40 +1,34 @@
 // pages/sport/[id].tsx
-"use client";
-import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
 
-export default function SportsPage({ searchParams }) {
-  const [oddsData, setOddsData] = useState<null | OddsData[]>(null);
-  const [error, setError] = useState<null | string>(null);
+export default async function SportsPage({ searchParams }) {
+  // const [oddsData, setOddsData] = useState<null | OddsData[]>(null);
+  // const [error, setError] = useState<null | string>(null);
   const id = searchParams.id;
+  console.log(id);
+  const fetchData = async () => {
+    console.log(id);
+    if (id) {
+      try {
+        const response = await fetch(`${process.env.DEV_URL}/api/proxy/${id}`);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      if (id) {
-        try {
-          const response = await fetch(`/api/proxy/${id}`);
-
-          if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-          }
-
-          const data: OddsData = await response.json();
-
-          setOddsData(data);
-        } catch (error) {
-          setError(error.message);
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
         }
-      }
-    };
 
-    fetchData();
-  }, [id]);
+        const data = await response.json();
+        return data;
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  };
+
+  const oddsData: OddsData[] = await fetchData();
 
   // render your oddsData here
 
   return (
     <div className='max-w-screen mx-auto px-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4'>
-      {error && <p className='text-red-500'>Error: {error}</p>}
       {oddsData &&
         oddsData.map((odd) => (
           <div key={odd.id} className='card bordered bg-slate-600'>
