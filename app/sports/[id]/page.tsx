@@ -35,7 +35,7 @@ export default async function SportsPage({ searchParams }) {
   // render your oddsData here
 
   return (
-    <div className='max-w-screen mx-auto px-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-4 text-white'>
+    <div className='max-w-screen mx-auto px-4 grid grid-cols-1 sm:grid-cols-1md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-3 text-white'>
       {oddsData &&
         oddsData.map((odd) => (
           <OddComponent odd={odd} sportsbooks={sportsbooks} />
