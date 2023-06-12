@@ -1,5 +1,25 @@
 // pages/sport/[id].tsx
 import OddComponent from "../../components/Odds";
+
+const fetchData = async (id: string) => {
+  console.log(id);
+  if (id) {
+    try {
+      const response = await fetch(`${process.env.DEV_URL}/api/proxy/${id}`, {
+        next: { revalidate: 28800 },
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+};
 export default async function SportsPage({ searchParams }) {
   // const [oddsData, setOddsData] = useState<null | OddsData[]>(null);
   // const [error, setError] = useState<null | string>(null);
@@ -12,25 +32,7 @@ export default async function SportsPage({ searchParams }) {
     "Barstool Sportsbook",
   ];
 
-  const fetchData = async () => {
-    console.log(id);
-    if (id) {
-      try {
-        const response = await fetch(`${process.env.DEV_URL}/api/proxy/${id}`);
-
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-
-        const data = await response.json();
-        return data;
-      } catch (error) {
-        console.log(error);
-      }
-    }
-  };
-
-  const oddsData: OddsData[] = await fetchData();
+  const oddsData: OddsData[] = await fetchData(id);
 
   // render your oddsData here
 

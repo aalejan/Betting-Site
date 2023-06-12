@@ -20,12 +20,12 @@ export default function OddComponent({
         <div key={odd.id} className='card'>
           <div className='card-body'>
             <div className='collapse collapse-arrow' onClick={toggleOpen}>
-              <input type='checkbox' checked={isOpen} />
-              <p className='collapse-title'>
+              <input type='checkbox' readOnly checked={isOpen} />
+              <div className='collapse-title'>
                 <h2 className='card-title bg-primary rounded-lg p-3'>
                   {odd.home_team} vs {odd.away_team}
                 </h2>
-              </p>
+              </div>
               <div className='collapse-content'>
                 {odd.bookmakers.map((book) =>
                   sportsbooks.includes(book.title) ? (
