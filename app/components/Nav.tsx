@@ -6,14 +6,18 @@ import Link from "next/link";
 
 export default function Nav({ user }: Session) {
   const sports = ["mma_mixed_martial_arts", "baseball_mlb", "basketball_nba"];
-  console.log(user?.name);
+  const sportKey: { [key: string]: string } = {
+    mma_mixed_martial_arts: "MMA",
+    baseball_mlb: "MLB",
+    basketball_nba: "NBA",
+  };
 
   return (
     <nav className='flex justify-between items-center py-8'>
       <Link className='' href={"/"}>
         <h1 className='text-2xl font-bold'>Big Bets</h1>
       </Link>
-      <ul className='flex items-center gap-12'>
+      <ul className='flex items-center gap-12 font-semibold'>
         {sports.map((sport) => (
           <li key={sport}>
             <Link
@@ -23,7 +27,7 @@ export default function Nav({ user }: Session) {
                 query: { id: sport },
               }}
             >
-              {sport}
+              {sportKey[sport]}
             </Link>
           </li>
         ))}

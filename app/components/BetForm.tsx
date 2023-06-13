@@ -3,24 +3,24 @@ import { useRouter } from "next/navigation";
 import { Session } from "next-auth";
 import { useState } from "react";
 
-export default function BetForm({ user }: Session) {
-  const [userId, setUserId] = useState("");
-  const [teamBetOn, setTeamBetOn] = useState("");
-  const [teamBetAgainst, setTeamBetAgainst] = useState("");
-  const [amount, setAmount] = useState("");
-  const [type, setType] = useState("");
+export default function BetForm() {
   const router = useRouter();
 
   const submitForm = async (event: React.FormEvent) => {
     event.preventDefault();
 
     const data = {
-      userId: initialUserId,
-      teamBetOn: event.target.teamBetOn.value,
-      teamBetAgainst: event.target.teamBetAgainst.value,
-      amount: parseFloat(event.target.amount.value),
-      type: event.target.type.value,
+      teamBetOn: (event.target as HTMLFormElement)["teamBetOn"].value,
+      teamBetAgainst: (event.target as HTMLFormElement)["teamBetAgainst"].value,
+      amount: parseFloat((event.target as HTMLFormElement)["amount"].value),
+      oddsTaken: parseFloat(
+        (event.target as HTMLFormElement)["oddsTaken"].value
+      ),
+      type: (event.target as HTMLFormElement)["type"].value,
+      status: (event.target as HTMLFormElement)["status"].value,
     };
+
+    console.log(data);
 
     const JSONdata = JSON.stringify(data);
 
@@ -35,7 +35,7 @@ export default function BetForm({ user }: Session) {
     };
 
     const response = await fetch(endpoint, options);
-
+    console.log(response);
     if (response.status === 403) {
       return router.push("/api/auth/signin");
     }
@@ -64,8 +64,6 @@ export default function BetForm({ user }: Session) {
             id='teamBetOn'
             name='teamBetOn'
             required
-            value={teamBetOn}
-            onChange={(e) => setTeamBetOn(e.target.value)}
             className='mt-1 w-full px-4 py-2 rounded-lg bg-gray-800 text-white'
           />
         </div>
@@ -78,8 +76,17 @@ export default function BetForm({ user }: Session) {
             id='teamBetAgainst'
             name='teamBetAgainst'
             required
-            value={teamBetAgainst}
-            onChange={(e) => setTeamBetAgainst(e.target.value)}
+            className='mt-1 w-full px-4 py-2 rounded-lg bg-gray-800 text-white'
+          />
+        </div>
+        <div className='mb-4'>
+          <label htmlFor='oddsTaken' className='block text-white'>
+            Odds
+          </label>
+          <input
+            id='oddsTaken'
+            name='oddsTaken'
+            type='number'
             className='mt-1 w-full px-4 py-2 rounded-lg bg-gray-800 text-white'
           />
         </div>
@@ -91,10 +98,22 @@ export default function BetForm({ user }: Session) {
             id='amount'
             name='amount'
             type='number'
-            value={amount}
-            onChange={(e) => setAmount(e.target.value)}
             className='mt-1 w-full px-4 py-2 rounded-lg bg-gray-800 text-white'
           />
+        </div>
+        <div className='mb-4'>
+          <label htmlFor='status' className='block text-white'>
+            Bet Status
+          </label>
+          <select
+            id='status'
+            name='status'
+            required
+            className='mt-1 w-full px-4 py-2 rounded-lg bg-gray-800 text-white'
+          >
+            <option value='in_progress'>In progress</option>
+            <option value='completed'>Completed</option>
+          </select>
         </div>
         <div className='mb-4'>
           <label htmlFor='type' className='block text-white'>
@@ -104,8 +123,6 @@ export default function BetForm({ user }: Session) {
             id='type'
             name='type'
             required
-            value={type}
-            onChange={(e) => setType(e.target.value)}
             className='mt-1 w-full px-4 py-2 rounded-lg bg-gray-800 text-white'
           >
             <option value='h2h'>Head-to-Head</option>
