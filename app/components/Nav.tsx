@@ -15,7 +15,7 @@ export default function Nav({ user }: Session) {
       </Link>
       <ul className='flex items-center gap-12'>
         {sports.map((sport) => (
-          <li>
+          <li key={sport}>
             <Link
               key={sport}
               href={{
@@ -28,7 +28,20 @@ export default function Nav({ user }: Session) {
           </li>
         ))}
       </ul>
-      <button className='btn-primary rounded-md p-4'>Sign in</button>
+      {user && (
+        <button
+          onClick={() => signOut()}
+          className='btn-primary rounded-md p-4'
+        >
+          Sign out
+        </button>
+      )}
+
+      {!user && (
+        <button onClick={() => signIn()} className='btn-primary rounded-md p-4'>
+          Sign in
+        </button>
+      )}
     </nav>
   );
 }
