@@ -17,7 +17,7 @@ export default function BetForm() {
         (event.target as HTMLFormElement)["oddsTaken"].value
       ),
       type: (event.target as HTMLFormElement)["type"].value,
-      status: (event.target as HTMLFormElement)["status"].value,
+      betStatus: (event.target as HTMLFormElement)["status"].value,
     };
 
     console.log(data);
@@ -53,7 +53,7 @@ export default function BetForm() {
         onSubmit={submitForm}
         className='bg-neutral p-6 rounded-lg shadow-lg max-w-md lg:max-w-lg xl:max-w-xl mx-auto'
       >
-        <h2 className='text-2xl mb-4 text-white'>Place your Bet</h2>
+        <h2 className='text-2xl mb-4 text-white'>Track your Bet</h2>
 
         <div className='mb-4'>
           <label htmlFor='teamBetOn' className='block text-white'>
@@ -133,7 +133,7 @@ export default function BetForm() {
           type='submit'
           className='w-full px-4 py-2 rounded-lg bg-primary text-white'
         >
-          Place Bet
+          Save Bet
         </button>
       </form>
     </div>

@@ -1,6 +1,6 @@
 // pages/api/bets.ts
 
-import { PrismaClient, BetType } from "@prisma/client";
+import { PrismaClient, BetType, BetStatus } from "@prisma/client";
 import { authOptions } from "./auth/[...nextauth]";
 import { getServerSession } from "next-auth";
 import type { NextApiRequest, NextApiResponse } from "next";
@@ -20,7 +20,8 @@ export default async function handler(
   const userId = userSession.user?.id;
 
   if (req.method === "POST") {
-    const { teamBetOn, teamBetAgainst, amount, type } = req.body;
+    const { teamBetOn, teamBetAgainst, amount, type, betStatus, oddsTaken } =
+      req.body;
 
     // Validation can be added here to ensure that all required fields are filled out
 
@@ -30,8 +31,10 @@ export default async function handler(
           userId,
           teamBetOn,
           teamBetAgainst,
+          oddsTaken,
           amount,
           type: BetType[type as keyof typeof BetType],
+          betStatus: BetStatus[betStatus as keyof typeof BetStatus],
           createdAt: new Date(),
           updatedAt: new Date(),
         },
