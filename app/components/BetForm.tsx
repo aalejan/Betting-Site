@@ -5,6 +5,7 @@ import { useState } from "react";
 
 export default function BetForm() {
   const router = useRouter();
+  const [status, setStatus] = useState("");
 
   const submitForm = async (event: React.FormEvent) => {
     event.preventDefault();
@@ -18,6 +19,14 @@ export default function BetForm() {
       ),
       type: (event.target as HTMLFormElement)["type"].value,
       betStatus: (event.target as HTMLFormElement)["status"].value,
+      profitOrLoss: parseFloat(
+        (event.target as HTMLFormElement)["oddsTaken"].value
+      ),
+
+      potentialWinnings: parseFloat(
+        (event.target as HTMLFormElement)["amount"].value
+      ),
+      betOutcome: (event.target as HTMLFormElement)["status"].value,
     };
 
     console.log(data);
@@ -87,6 +96,7 @@ export default function BetForm() {
             id='oddsTaken'
             name='oddsTaken'
             type='number'
+            required
             className='mt-1 w-full px-4 py-2 rounded-lg bg-gray-800 text-white'
           />
         </div>
@@ -98,9 +108,39 @@ export default function BetForm() {
             id='amount'
             name='amount'
             type='number'
+            required
             className='mt-1 w-full px-4 py-2 rounded-lg bg-gray-800 text-white'
           />
         </div>
+        {status === "in_progress" && (
+          <div className='mb-4'>
+            <label htmlFor='potentialWinnings' className='block text-white'>
+              Potential winnings
+            </label>
+            <input
+              id='potentialWinnings'
+              name='potentialWinnings'
+              type='potentialWinnings'
+              required
+              className='mt-1 w-full px-4 py-2 rounded-lg bg-gray-800 text-white'
+            />
+          </div>
+        )}
+        {status === "completed" && (
+          <div className='mb-4'>
+            <label htmlFor='profitOrLoss' className='block text-white'>
+              Profit/Loss
+            </label>
+            <input
+              id='profitOrLoss'
+              name='profitOrLoss'
+              type='profitOrLoss'
+              required
+              className='mt-1 w-full px-4 py-2 rounded-lg bg-gray-800 text-white'
+            />
+          </div>
+        )}
+
         <div className='mb-4'>
           <label htmlFor='status' className='block text-white'>
             Bet Status
@@ -109,8 +149,10 @@ export default function BetForm() {
             id='status'
             name='status'
             required
+            onChange={(e) => setStatus(e.target.value)}
             className='mt-1 w-full px-4 py-2 rounded-lg bg-gray-800 text-white'
           >
+            <option value=''>Choose a status</option>
             <option value='in_progress'>In progress</option>
             <option value='completed'>Completed</option>
           </select>
@@ -127,6 +169,20 @@ export default function BetForm() {
           >
             <option value='h2h'>Head-to-Head</option>
             <option value='spread'>Spread</option>
+          </select>
+        </div>
+        <div className='mb-4'>
+          <label htmlFor='betOutcome' className='block text-white'>
+            Bet outcome
+          </label>
+          <select
+            id='betOutcome'
+            name='betOutcome'
+            required
+            className='mt-1 w-full px-4 py-2 rounded-lg bg-gray-800 text-white'
+          >
+            <option value='win'>Won</option>
+            <option value='loss'>Loss</option>
           </select>
         </div>
         <button

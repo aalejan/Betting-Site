@@ -20,8 +20,16 @@ export default async function handler(
   const userId = userSession.user?.id;
 
   if (req.method === "POST") {
-    const { teamBetOn, teamBetAgainst, amount, type, betStatus, oddsTaken } =
-      req.body;
+    const {
+      teamBetOn,
+      teamBetAgainst,
+      amount,
+      type,
+      betStatus,
+      oddsTaken,
+      profitOrLoss,
+      potentialWinnings,
+    } = req.body;
 
     // Validation can be added here to ensure that all required fields are filled out
 
@@ -35,6 +43,9 @@ export default async function handler(
           amount,
           type: BetType[type as keyof typeof BetType],
           betStatus: BetStatus[betStatus as keyof typeof BetStatus],
+          potentialWinnings,
+          profitOrLoss,
+          betOutcome: BetOutcome[type as keyof typeof BetOutcome]
           createdAt: new Date(),
           updatedAt: new Date(),
         },
