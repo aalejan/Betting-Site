@@ -26,7 +26,7 @@ export default function BetForm() {
       potentialWinnings: parseFloat(
         (event.target as HTMLFormElement)["amount"].value
       ),
-      betOutcome: (event.target as HTMLFormElement)["status"].value,
+      betOutcome: (event.target as HTMLFormElement)["betOutcome"].value, // Add this line
     };
 
     console.log(data);
@@ -52,7 +52,12 @@ export default function BetForm() {
     if (response.ok) {
       alert("Bet placed successfully!");
     } else {
-      throw new Error("An error occurred while placing the bet.");
+      const errorData = await response.json();
+      throw new Error(
+        `An error occurred while placing the bet: ${
+          response.status
+        }, ${JSON.stringify(errorData)}`
+      );
     }
   };
 
@@ -181,6 +186,7 @@ export default function BetForm() {
             required
             className='mt-1 w-full px-4 py-2 rounded-lg bg-gray-800 text-white'
           >
+            <option value=''>Choose an outcome</option>
             <option value='win'>Won</option>
             <option value='loss'>Loss</option>
           </select>

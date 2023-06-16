@@ -1,6 +1,6 @@
 // pages/api/bets.ts
 
-import { PrismaClient, BetType, BetStatus } from "@prisma/client";
+import { PrismaClient, BetType, BetStatus, BetOutcome } from "@prisma/client";
 import { authOptions } from "./auth/[...nextauth]";
 import { getServerSession } from "next-auth";
 import type { NextApiRequest, NextApiResponse } from "next";
@@ -29,8 +29,9 @@ export default async function handler(
       oddsTaken,
       profitOrLoss,
       potentialWinnings,
+      betOutcome,
     } = req.body;
-
+    console.log(betOutcome);
     // Validation can be added here to ensure that all required fields are filled out
 
     try {
@@ -45,7 +46,7 @@ export default async function handler(
           betStatus: BetStatus[betStatus as keyof typeof BetStatus],
           potentialWinnings,
           profitOrLoss,
-          betOutcome: BetOutcome[type as keyof typeof BetOutcome]
+          betOutcome: BetOutcome[betOutcome as keyof typeof BetOutcome],
           createdAt: new Date(),
           updatedAt: new Date(),
         },
