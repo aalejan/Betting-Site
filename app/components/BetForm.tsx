@@ -9,7 +9,11 @@ export default function BetForm() {
 
   const submitForm = async (event: React.FormEvent) => {
     event.preventDefault();
-
+    const resetForm = () => {
+      const form = event.target as HTMLFormElement;
+      form.reset();
+      setStatus("");
+    };
     const data = {
       teamBetOn: (event.target as HTMLFormElement)["teamBetOn"].value,
       teamBetAgainst: (event.target as HTMLFormElement)["teamBetAgainst"].value,
@@ -19,14 +23,17 @@ export default function BetForm() {
       ),
       type: (event.target as HTMLFormElement)["type"].value,
       betStatus: (event.target as HTMLFormElement)["status"].value,
-      profitOrLoss: parseFloat(
-        (event.target as HTMLFormElement)["oddsTaken"].value
-      ),
+      profitOrLoss: (event.target as HTMLFormElement)["profitOrLoss"]?.value
+        ? parseFloat((event.target as HTMLFormElement)["profitOrLoss"].value)
+        : null,
 
-      potentialWinnings: parseFloat(
-        (event.target as HTMLFormElement)["amount"].value
-      ),
-      betOutcome: (event.target as HTMLFormElement)["betOutcome"].value, // Add this line
+      potentialWinnings: (event.target as HTMLFormElement)["potentialWinnings"]
+        ?.value
+        ? parseFloat(
+            (event.target as HTMLFormElement)["potentialWinnings"]?.value
+          )
+        : null,
+      betOutcome: (event.target as HTMLFormElement)["betOutcome"]?.value, // Add this line
     };
 
     console.log(data);
@@ -51,6 +58,7 @@ export default function BetForm() {
 
     if (response.ok) {
       alert("Bet placed successfully!");
+      resetForm();
     } else {
       const errorData = await response.json();
       throw new Error(

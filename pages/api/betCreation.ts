@@ -30,7 +30,7 @@ export default async function handler(
       potentialWinnings,
       betOutcome,
     } = req.body;
-    console.log(betOutcome);
+
     // Validation can be added here to ensure that all required fields are filled out
 
     try {
