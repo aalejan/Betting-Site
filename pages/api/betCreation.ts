@@ -4,8 +4,7 @@ import { PrismaClient, BetType, BetStatus, BetOutcome } from "@prisma/client";
 import { authOptions } from "./auth/[...nextauth]";
 import { getServerSession } from "next-auth";
 import type { NextApiRequest, NextApiResponse } from "next";
-
-const prisma = new PrismaClient();
+import { prisma } from "@/utils/prisma";
 
 export default async function handler(
   req: NextApiRequest,

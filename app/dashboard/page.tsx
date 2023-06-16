@@ -1,7 +1,7 @@
 import { PrismaClient } from "@prisma/client";
 import { authOptions } from "../../pages/api/auth/[...nextauth]";
 import { getServerSession } from "next-auth";
-const prisma = new PrismaClient();
+import { prisma } from "../../utils/prisma";
 
 const fetchBets = async () => {
   const user = await getServerSession(authOptions);

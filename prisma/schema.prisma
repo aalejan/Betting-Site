@@ -83,7 +83,7 @@ model Bet {
   type           BetType   // This line is new
   oddsTaken      Float     // The odds taken when the bet was placed
   betStatus      BetStatus // The current status of the bet
-  betOutcome BetOutcome // The outcome of the bet
+  betOutcome BetOutcome? // The outcome of the bet
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
   user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)

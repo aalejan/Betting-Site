@@ -176,21 +176,24 @@ export default function BetForm() {
             <option value='spread'>Spread</option>
           </select>
         </div>
-        <div className='mb-4'>
-          <label htmlFor='betOutcome' className='block text-white'>
-            Bet outcome
-          </label>
-          <select
-            id='betOutcome'
-            name='betOutcome'
-            required
-            className='mt-1 w-full px-4 py-2 rounded-lg bg-gray-800 text-white'
-          >
-            <option value=''>Choose an outcome</option>
-            <option value='win'>Won</option>
-            <option value='loss'>Loss</option>
-          </select>
-        </div>
+        {status === "completed" && (
+          <div className='mb-4'>
+            <label htmlFor='betOutcome' className='block text-white'>
+              Bet outcome
+            </label>
+            <select
+              id='betOutcome'
+              name='betOutcome'
+              required
+              className='mt-1 w-full px-4 py-2 rounded-lg bg-gray-800 text-white'
+            >
+              <option value=''>Choose an outcome</option>
+              <option value='win'>Won</option>
+              <option value='loss'>Loss</option>
+            </select>
+          </div>
+        )}
+
         <button
           type='submit'
           className='w-full px-4 py-2 rounded-lg bg-primary text-white'
