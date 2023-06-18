@@ -24,21 +24,30 @@ export default function Nav({ user }: Session) {
       <Link className='' href={"/"}>
         <h1 className='text-2xl font-bold'>Big Bets</h1>
       </Link>
-      <ul className='flex items-center gap-12 font-semibold'>
-        {sports.map((sport) => (
-          <li key={sport}>
-            <Link
-              key={sport}
-              href={{
-                pathname: `/sports/${sport}`,
-                query: { id: sport },
-              }}
-            >
-              {sportKey[sport]}
-            </Link>
-          </li>
-        ))}
-      </ul>
+      <div className='dropdown '>
+        <label tabIndex={0} className='btn m-1 text-lg'>
+          Choose a sport
+        </label>
+        <ul
+          tabIndex={0}
+          className='dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52 font-semibold text-lg'
+        >
+          {sports.map((sport) => (
+            <li key={sport}>
+              <Link
+                key={sport}
+                href={{
+                  pathname: `/sports/${sport}`,
+                  query: { id: sport },
+                }}
+              >
+                {sportKey[sport]}
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </div>
+
       {user && (
         <div className='dropdown dropdown-end'>
           <label tabIndex={0} className='btn btn-ghost btn-circle avatar'>
