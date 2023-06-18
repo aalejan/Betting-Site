@@ -1,13 +1,14 @@
 "use client";
 import { useRouter } from "next/navigation";
 import { Session } from "next-auth";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import Link from "next/link";
 
 export default function BetForm() {
   const router = useRouter();
   const [status, setStatus] = useState("");
   const [showModal, setShowModal] = useState(false);
+  const dialogRef = useRef<HTMLDialogElement>(null);
 
   const submitForm = async (event: React.FormEvent) => {
     event.preventDefault();
@@ -59,7 +60,9 @@ export default function BetForm() {
     }
 
     if (response.ok) {
-      setShowModal(true);
+      if (dialogRef.current) {
+        dialogRef.current.showModal();
+      }
       resetForm();
     } else {
       const errorData = await response.json();
@@ -73,12 +76,11 @@ export default function BetForm() {
 
   return (
     <div className='  text-white min-h-screen'>
-      {showModal && window.my_modal_2.showModal()}
-      <dialog id='my_modal_2' className='modal'>
+      <dialog ref={dialogRef} id='my_modal_2' className='modal'>
         <form method='dialog' className='modal-box'>
-          <h3 className='font-bold text-lg'>Hello!</h3>
-          <p className='py-4'>Bet placed successfully!</p>
-          <Link className='btn-primary' href={"/dashboard"}>
+          <h3 className='font-bold text-lg'>Bet placed successfully!</h3>
+          <p className='py-4'>See all bets in your Dashboard.</p>
+          <Link className='btn-primary rounded-md p-2' href={"/dashboard"}>
             Dashboard
           </Link>
         </form>
@@ -165,6 +167,7 @@ export default function BetForm() {
               name='profitOrLoss'
               type='profitOrLoss'
               required
+              placeholder='If loss, please enter a negative number'
               className='mt-1 w-full px-4 py-2 rounded-lg bg-gray-800 text-white'
             />
           </div>
