@@ -30,7 +30,7 @@ export default function Nav({ user }: Session) {
         </label>
         <ul
           tabIndex={0}
-          className='dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52 font-semibold text-lg'
+          className='dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52 font-semibold text-lg relative z-50'
         >
           {sports.map((sport) => (
             <li key={sport}>
