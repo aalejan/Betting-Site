@@ -6,6 +6,26 @@ import { useState } from "react";
 
 export default function Bet({ bet }: { bet: Bet }) {
   const [editing, setEditing] = useState(false);
+  const [potentialWinnings, setPotentialWinnings] = useState(
+    bet.potentialWinnings
+  );
+  const [profitOrLoss, setProfitOrLoss] = useState(bet.profitOrLoss);
+
+  const saveBet = async () => {
+    const response = await fetch("/api/updateBet", {
+      method: "PUT",
+      body: JSON.stringify({
+        id: bet.id,
+        potentialWinnings: parseFloat(potentialWinnings),
+        profitOrLoss: parseFloat(profitOrLoss),
+      }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    const data = await response.json();
+    console.log(data);
+  };
   return (
     <div key={bet.id} className='card bg-neutral bordered'>
       <div className='card-body'>
@@ -30,7 +50,10 @@ export default function Bet({ bet }: { bet: Bet }) {
             {!editing ? (
               <span className='font-semibold'>{bet.potentialWinnings}</span>
             ) : (
-              <input />
+              <input
+                value={potentialWinnings}
+                onChange={(e) => setPotentialWinnings(e.target.value)}
+              />
             )}
           </p>
         )}
@@ -40,7 +63,10 @@ export default function Bet({ bet }: { bet: Bet }) {
             {!editing ? (
               <span className='font-semibold'>{bet.profitOrLoss}</span>
             ) : (
-              <input />
+              <input
+                value={profitOrLoss}
+                onChange={(e) => setProfitOrLoss(e.target.value)}
+              />
             )}
           </p>
         )}
@@ -82,7 +108,10 @@ export default function Bet({ bet }: { bet: Bet }) {
             Edit bet
           </button>
         ) : (
-          <button className='btn-primary rounded-md p-2 font-semibold'>
+          <button
+            onClick={saveBet}
+            className='btn-primary rounded-md p-2 font-semibold'
+          >
             Save bet
           </button>
         )}
