@@ -11,6 +11,10 @@ export default function Bet({ bet }: { bet: Bet }) {
   );
   const [profitOrLoss, setProfitOrLoss] = useState(bet.profitOrLoss);
 
+  const [tempPotentialWinnings, setTempPotentialWinnings] =
+    useState(potentialWinnings);
+  const [tempProfitOrLoss, setTempProfitOrLoss] = useState(profitOrLoss);
+
   const saveBet = async () => {
     const response = await fetch("/api/updateBet", {
       method: "PUT",
@@ -25,6 +29,14 @@ export default function Bet({ bet }: { bet: Bet }) {
     });
     const data = await response.json();
     console.log(data);
+    if (response.ok) {
+      setEditing(false);
+      // Update state with temporary values
+      setPotentialWinnings(tempPotentialWinnings);
+      setProfitOrLoss(tempProfitOrLoss);
+    } else {
+      console.error("Error saving bet:", data);
+    }
   };
   return (
     <div key={bet.id} className='card bg-neutral bordered'>
@@ -48,11 +60,12 @@ export default function Bet({ bet }: { bet: Bet }) {
           <p>
             Potential winnings:{" "}
             {!editing ? (
-              <span className='font-semibold'>{bet.potentialWinnings}</span>
+              <span className='font-semibold'>{potentialWinnings}</span>
             ) : (
               <input
-                value={potentialWinnings}
-                onChange={(e) => setPotentialWinnings(e.target.value)}
+                type='number'
+                value={tempPotentialWinnings}
+                onChange={(e) => setTempPotentialWinnings(e.target.value)}
               />
             )}
           </p>
@@ -61,11 +74,12 @@ export default function Bet({ bet }: { bet: Bet }) {
           <p>
             Profit/Loss:{" "}
             {!editing ? (
-              <span className='font-semibold'>{bet.profitOrLoss}</span>
+              <span className='font-semibold'>{profitOrLoss}</span>
             ) : (
               <input
-                value={profitOrLoss}
-                onChange={(e) => setProfitOrLoss(e.target.value)}
+                type='number'
+                value={tempProfitOrLoss}
+                onChange={(e) => setTempProfitOrLoss(e.target.value)}
               />
             )}
           </p>
