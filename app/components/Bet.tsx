@@ -1,27 +1,25 @@
 "use client";
 
-import { Bet } from "@prisma/client";
-import { Input } from "postcss";
+import { Bet, BetOutcome, BetStatus } from "@prisma/client";
 import { useState } from "react";
 
 export default function Bet({ bet }: { bet: Bet }) {
   const [editing, setEditing] = useState(false);
-  const [potentialWinnings, setPotentialWinnings] = useState(
-    bet.potentialWinnings
-  );
-  const [profitOrLoss, setProfitOrLoss] = useState(bet.profitOrLoss);
+  const [betState, setBetState] = useState({
+    potentialWinnings: bet.potentialWinnings,
+    profitOrLoss: bet.profitOrLoss,
+    betOutcome: bet.betOutcome,
+    betStatus: bet.betStatus,
+  });
 
-  const [tempPotentialWinnings, setTempPotentialWinnings] =
-    useState(potentialWinnings);
-  const [tempProfitOrLoss, setTempProfitOrLoss] = useState(profitOrLoss);
+  const [tempBetState, setTempBetState] = useState({ ...betState });
 
   const saveBet = async () => {
     const response = await fetch("/api/updateBet", {
       method: "PUT",
       body: JSON.stringify({
         id: bet.id,
-        potentialWinnings: parseFloat(potentialWinnings),
-        profitOrLoss: parseFloat(profitOrLoss),
+        ...tempBetState,
       }),
       headers: {
         "Content-Type": "application/json",
@@ -31,9 +29,7 @@ export default function Bet({ bet }: { bet: Bet }) {
     console.log(data);
     if (response.ok) {
       setEditing(false);
-      // Update state with temporary values
-      setPotentialWinnings(tempPotentialWinnings);
-      setProfitOrLoss(tempProfitOrLoss);
+      setBetState(tempBetState);
     } else {
       console.error("Error saving bet:", data);
     }
@@ -60,12 +56,19 @@ export default function Bet({ bet }: { bet: Bet }) {
           <p>
             Potential winnings:{" "}
             {!editing ? (
-              <span className='font-semibold'>{potentialWinnings}</span>
+              <span className='font-semibold'>
+                {betState.potentialWinnings}
+              </span>
             ) : (
               <input
                 type='number'
-                value={tempPotentialWinnings}
-                onChange={(e) => setTempPotentialWinnings(e.target.value)}
+                value={tempBetState.potentialWinnings}
+                onChange={(e) =>
+                  setTempBetState((prevState) => ({
+                    ...prevState,
+                    potentialWinnings: parseFloat(e.target.value),
+                  }))
+                }
               />
             )}
           </p>
@@ -74,29 +77,68 @@ export default function Bet({ bet }: { bet: Bet }) {
           <p>
             Profit/Loss:{" "}
             {!editing ? (
-              <span className='font-semibold'>{profitOrLoss}</span>
+              <span className='font-semibold'>{betState.profitOrLoss}</span>
             ) : (
               <input
                 type='number'
-                value={tempProfitOrLoss}
-                onChange={(e) => setTempProfitOrLoss(e.target.value)}
+                value={tempBetState.profitOrLoss}
+                onChange={(e) =>
+                  setTempBetState((prevState) => ({
+                    ...prevState,
+                    profitOrLoss: parseFloat(e.target.value),
+                  }))
+                }
               />
             )}
           </p>
         )}
         <p>
           Status:{" "}
-          <span
-            className={`font-semibold ${
-              bet.betStatus === "completed" ? "text-accent" : "text-warning"
-            }`}
-          >
-            {bet.betStatus === "in_progress" ? "in progress" : bet.betStatus}
-          </span>
+          {!editing ? (
+            <span
+              className={`font-semibold ${
+                betState.betStatus === "completed"
+                  ? "text-accent"
+                  : "text-warning"
+              }`}
+            >
+              {betState.betStatus === "in_progress"
+                ? "in progress"
+                : betState.betStatus}
+            </span>
+          ) : (
+            <select
+              required
+              onChange={(e) => {
+                setTempBetState((prevState) => ({
+                  ...prevState,
+                  betStatus: e.target.value as BetStatus,
+                }));
+              }}
+            >
+              <option value='completed'>completed</option>
+              <option value='in_progress'>in progress</option>
+            </select>
+          )}
         </p>
         {bet.betStatus === "completed" && (
           <p>
-            Bet outcome: <span className='font-semibold'>{bet.betOutcome}</span>
+            Bet outcome: {""}
+            {!editing ? (
+              <span className='font-semibold'>{betState.betOutcome}</span>
+            ) : (
+              <select
+                onChange={(e) =>
+                  setTempBetState((prevState) => ({
+                    ...prevState,
+                    betOutcome: e.target.value as BetOutcome,
+                  }))
+                }
+              >
+                <option value='win'>win</option>
+                <option value='loss'>loss</option>
+              </select>
+            )}
           </p>
         )}
         <p>

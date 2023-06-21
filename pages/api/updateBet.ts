@@ -18,7 +18,8 @@ export default async function handler(
   const userId = userSession.user?.id;
 
   if (req.method === "PUT") {
-    const { id, profitOrLoss, potentialWinnings } = req.body;
+    const { id, profitOrLoss, potentialWinnings, betOutcome, betStatus } =
+      req.body;
 
     // Validation can be added here to ensure that all required fields are filled out
 
@@ -31,6 +32,12 @@ export default async function handler(
       }
       if (potentialWinnings !== undefined) {
         updateData.potentialWinnings = potentialWinnings;
+      }
+      if (betOutcome !== undefined) {
+        updateData.betOutcome = betOutcome;
+      }
+      if (betStatus !== undefined) {
+        updateData.betStatus = betStatus;
       }
 
       const bet = await prisma.bet.update({
