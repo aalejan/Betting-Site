@@ -126,8 +126,10 @@ export default function BetForm() {
           <input
             id='oddsTaken'
             name='oddsTaken'
-            type='number'
+            type='text'
             required
+            pattern='-?\d+(\.\d+)?'
+            title='Please enter a valid number'
             className='mt-1 w-full px-4 py-2 rounded-lg bg-gray-800 text-white'
           />
         </div>
@@ -138,8 +140,10 @@ export default function BetForm() {
           <input
             id='amount'
             name='amount'
-            type='number'
+            type='text'
+            pattern='[0-9]+(\.[0-9]+)?'
             required
+            title='Please enter a valid number or decimal'
             className='mt-1 w-full px-4 py-2 rounded-lg bg-gray-800 text-white'
           />
         </div>
