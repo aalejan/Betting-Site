@@ -52,7 +52,7 @@ export default function Bet({ bet }: { bet: Bet }) {
         <p>
           Amount: <span className='font-semibold'>{bet.amount}</span>
         </p>
-        {bet.betStatus === "in_progress" && (
+        {betState.betStatus === "in_progress" && (
           <p>
             Potential winnings:{" "}
             {!editing ? (
@@ -73,7 +73,25 @@ export default function Bet({ bet }: { bet: Bet }) {
             )}
           </p>
         )}
-        {bet.betStatus === "completed" && (
+        {editing &&
+          tempBetState.betStatus === "in_progress" &&
+          betState.betStatus != "in_progress" && (
+            <p>
+              Potential winnings: {""}
+              <input
+                type='number'
+                value={tempBetState.potentialWinnings}
+                onChange={(e) =>
+                  setTempBetState((prevState) => ({
+                    ...prevState,
+                    potentialWinnings: parseFloat(e.target.value),
+                  }))
+                }
+              />
+            </p>
+          )}
+
+        {betState.betStatus === "completed" && (
           <p>
             Profit/Loss:{" "}
             {!editing ? (
@@ -92,6 +110,23 @@ export default function Bet({ bet }: { bet: Bet }) {
             )}
           </p>
         )}
+        {editing &&
+          tempBetState.betStatus === "completed" &&
+          betState.betStatus != "completed" && (
+            <p>
+              Profit/Loss: {""}
+              <input
+                type='number'
+                value={tempBetState.profitOrLoss}
+                onChange={(e) =>
+                  setTempBetState((prevState) => ({
+                    ...prevState,
+                    profitOrLoss: parseFloat(e.target.value),
+                  }))
+                }
+              />
+            </p>
+          )}
         <p>
           Status:{" "}
           {!editing ? (
@@ -116,18 +151,48 @@ export default function Bet({ bet }: { bet: Bet }) {
                 }));
               }}
             >
+              <option value=''>Choose a status</option>
               <option value='completed'>completed</option>
               <option value='in_progress'>in progress</option>
             </select>
           )}
         </p>
-        {bet.betStatus === "completed" && (
+        {betState.betStatus === "completed" && (
           <p>
-            Bet outcome: {""}
-            {!editing ? (
-              <span className='font-semibold'>{betState.betOutcome}</span>
-            ) : (
+            {!editing && (
+              <>
+                Bet outcome: {""}
+                <span className='font-semibold'>{betState.betOutcome}</span>
+              </>
+            )}
+            {editing && tempBetState.betStatus === "completed" && (
+              <>
+                Bet outcome: {""}
+                <select
+                  required
+                  onChange={(e) =>
+                    setTempBetState((prevState) => ({
+                      ...prevState,
+                      betOutcome: e.target.value as BetOutcome,
+                    }))
+                  }
+                >
+                  <option value=''>Choose an outcome</option>
+                  <option value='win'>win</option>
+                  <option value='loss'>loss</option>
+                </select>
+              </>
+            )}
+          </p>
+        )}
+
+        {editing &&
+          tempBetState.betStatus === "completed" &&
+          betState.betStatus != "completed" && (
+            <p>
+              Profit/Loss: {""}
               <select
+                required
                 onChange={(e) =>
                   setTempBetState((prevState) => ({
                     ...prevState,
@@ -135,12 +200,12 @@ export default function Bet({ bet }: { bet: Bet }) {
                   }))
                 }
               >
+                <option value=''>Choose an outcome</option>
                 <option value='win'>win</option>
                 <option value='loss'>loss</option>
               </select>
-            )}
-          </p>
-        )}
+            </p>
+          )}
         <p>
           Type: <span className='font-semibold'>{bet.type}</span>
         </p>
@@ -175,7 +240,12 @@ export default function Bet({ bet }: { bet: Bet }) {
         {editing && (
           <button
             className='btn-ghost p-2 mt-1 rounded-md'
-            onClick={() => setEditing(false)}
+            onClick={() => {
+              setEditing(false);
+              setTempBetState({
+                ...betState,
+              });
+            }}
           >
             Cancel
           </button>
