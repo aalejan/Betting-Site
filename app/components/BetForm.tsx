@@ -60,10 +60,12 @@ export default function BetForm() {
     }
 
     if (response.ok) {
-      if (dialogRef.current) {
-        dialogRef.current.showModal();
-      }
-      resetForm();
+      setTimeout(() => {
+        if (dialogRef.current) {
+          dialogRef.current.showModal();
+        }
+        resetForm();
+      }, 300);
     } else {
       const errorData = await response.json();
       throw new Error(
@@ -171,6 +173,8 @@ export default function BetForm() {
               name='profitOrLoss'
               type='profitOrLoss'
               required
+              pattern='-?\d+(\.\d+)?'
+              title='Please enter a valid number or decimal'
               placeholder='If loss, please enter a negative number'
               className='mt-1 w-full px-4 py-2 rounded-lg bg-gray-800 text-white'
             />

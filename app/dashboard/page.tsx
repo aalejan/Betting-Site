@@ -17,7 +17,7 @@ const fetchBets = async () => {
 
 export default async function BetsDashboard() {
   const userBets = await fetchBets();
-  console.log(userBets);
+
   return (
     <div className='flex flex-col lg:flex-row xl:flex-row items-center lg:items-start xl:items-start flex-wrap justify-center gap-3'>
       {userBets && userBets.map((bet) => <Bet bet={bet} />)}

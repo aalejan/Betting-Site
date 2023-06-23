@@ -1,6 +1,7 @@
 "use client";
 
 import { Bet, BetOutcome, BetStatus } from "@prisma/client";
+import { BsTrash3Fill } from "react-icons/bs";
 import { useState } from "react";
 
 export default function Bet({ bet }: { bet: Bet }) {
@@ -25,6 +26,7 @@ export default function Bet({ bet }: { bet: Bet }) {
         "Content-Type": "application/json",
       },
     });
+    console.log(response);
     const data = await response.json();
     console.log(data);
     if (response.ok) {
@@ -34,9 +36,36 @@ export default function Bet({ bet }: { bet: Bet }) {
       console.error("Error saving bet:", data);
     }
   };
+
+  const deleteBet = async () => {
+    try {
+      const response = await fetch(`/api/deleteBet/${bet.id}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      console.log(response);
+      const data = await response.json();
+      console.log(data);
+      if (response.ok) {
+        console.log("Bet deleted:");
+      } else {
+        console.error("Error deleting bet:");
+      }
+    } catch (error) {
+      console.log("Error:", error);
+    }
+  };
+
   return (
     <div key={bet.id} className='card bg-neutral bordered'>
       <div className='card-body'>
+        <p className='flex justify-end'>
+          <button onClick={deleteBet}>
+            <BsTrash3Fill />
+          </button>
+        </p>
         <h2 className='card-title'>
           {bet.teamBetOn} vs {bet.teamBetAgainst}
         </h2>
