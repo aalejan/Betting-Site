@@ -3,6 +3,7 @@
 import { Bet, BetOutcome, BetStatus } from "@prisma/client";
 import { BsTrash3Fill } from "react-icons/bs";
 import { useState } from "react";
+import { mutate } from "swr";
 
 export default function Bet({ bet }: { bet: Bet }) {
   const [editing, setEditing] = useState(false);
@@ -26,9 +27,8 @@ export default function Bet({ bet }: { bet: Bet }) {
         "Content-Type": "application/json",
       },
     });
-    console.log(response);
     const data = await response.json();
-    console.log(data);
+
     if (response.ok) {
       setEditing(false);
       setBetState(tempBetState);
@@ -45,11 +45,12 @@ export default function Bet({ bet }: { bet: Bet }) {
           "Content-Type": "application/json",
         },
       });
-      console.log(response);
+
       const data = await response.json();
-      console.log(data);
+
       if (response.ok) {
         console.log("Bet deleted:");
+        mutate("/api/bets");
       } else {
         console.error("Error deleting bet:");
       }

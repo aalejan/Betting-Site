@@ -1,26 +1,18 @@
-import { PrismaClient } from "@prisma/client";
-import { authOptions } from "../../pages/api/auth/[...nextauth]";
-import { getServerSession } from "next-auth";
-import { prisma } from "../../utils/prisma";
+"use client";
+
 import Bet from "../components/Bet";
+import useSwr from "swr";
 
-const fetchBets = async () => {
-  const user = await getServerSession(authOptions);
-  if (!user) {
-    return null;
-  }
-  const bets = await prisma.bet.findMany({
-    where: { userId: user?.user?.id },
-  });
-  return bets;
-};
+const fetcher = (url) => fetch(url).then((res) => res.json());
+const API = `/api/bets`;
 
-export default async function BetsDashboard() {
-  const userBets = await fetchBets();
+export default function BetsDashboard() {
+  const { data: bets, error } = useSwr(API, fetcher);
+  console.log(bets);
 
   return (
     <div className='flex flex-col lg:flex-row xl:flex-row items-center lg:items-start xl:items-start flex-wrap justify-center gap-3'>
-      {userBets && userBets.map((bet) => <Bet bet={bet} />)}
+      {bets && bets.map((bet) => <Bet bet={bet} />)}
     </div>
   );
 }
