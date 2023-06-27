@@ -31,7 +31,7 @@ export default function Bet({ bet }: { bet: Bet }) {
 
     if (response.ok) {
       setEditing(false);
-      setBetState(tempBetState);
+      mutate("/api/bets");
     } else {
       console.error("Error saving bet:", data);
     }
