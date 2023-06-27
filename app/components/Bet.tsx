@@ -7,14 +7,13 @@ import { mutate } from "swr";
 
 export default function Bet({ bet }: { bet: Bet }) {
   const [editing, setEditing] = useState(false);
-  const [betState, setBetState] = useState({
+
+  const [tempBetState, setTempBetState] = useState({
     potentialWinnings: bet.potentialWinnings,
     profitOrLoss: bet.profitOrLoss,
     betOutcome: bet.betOutcome,
     betStatus: bet.betStatus,
   });
-
-  const [tempBetState, setTempBetState] = useState({ ...betState });
 
   const saveBet = async () => {
     const response = await fetch("/api/updateBet", {
@@ -82,13 +81,11 @@ export default function Bet({ bet }: { bet: Bet }) {
         <p>
           Amount: <span className='font-semibold'>{bet.amount}</span>
         </p>
-        {betState.betStatus === "in_progress" && (
+        {bet.betStatus === "in_progress" && (
           <p>
             Potential winnings:{" "}
             {!editing ? (
-              <span className='font-semibold'>
-                {betState.potentialWinnings}
-              </span>
+              <span className='font-semibold'>{bet.potentialWinnings}</span>
             ) : (
               <input
                 type='number'
@@ -105,7 +102,7 @@ export default function Bet({ bet }: { bet: Bet }) {
         )}
         {editing &&
           tempBetState.betStatus === "in_progress" &&
-          betState.betStatus != "in_progress" && (
+          bet.betStatus != "in_progress" && (
             <p>
               Potential winnings: {""}
               <input
@@ -121,11 +118,11 @@ export default function Bet({ bet }: { bet: Bet }) {
             </p>
           )}
 
-        {betState.betStatus === "completed" && (
+        {bet.betStatus === "completed" && (
           <p>
             Profit/Loss:{" "}
             {!editing ? (
-              <span className='font-semibold'>{betState.profitOrLoss}</span>
+              <span className='font-semibold'>{bet.profitOrLoss}</span>
             ) : (
               <input
                 type='number'
@@ -142,7 +139,7 @@ export default function Bet({ bet }: { bet: Bet }) {
         )}
         {editing &&
           tempBetState.betStatus === "completed" &&
-          betState.betStatus != "completed" && (
+          bet.betStatus != "completed" && (
             <p>
               Profit/Loss: {""}
               <input
@@ -162,14 +159,10 @@ export default function Bet({ bet }: { bet: Bet }) {
           {!editing ? (
             <span
               className={`font-semibold ${
-                betState.betStatus === "completed"
-                  ? "text-accent"
-                  : "text-warning"
+                bet.betStatus === "completed" ? "text-accent" : "text-warning"
               }`}
             >
-              {betState.betStatus === "in_progress"
-                ? "in progress"
-                : betState.betStatus}
+              {bet.betStatus === "in_progress" ? "in progress" : bet.betStatus}
             </span>
           ) : (
             <select
@@ -187,12 +180,12 @@ export default function Bet({ bet }: { bet: Bet }) {
             </select>
           )}
         </p>
-        {betState.betStatus === "completed" && (
+        {bet.betStatus === "completed" && (
           <p>
             {!editing && (
               <>
                 Bet outcome: {""}
-                <span className='font-semibold'>{betState.betOutcome}</span>
+                <span className='font-semibold'>{bet.betOutcome}</span>
               </>
             )}
             {editing && tempBetState.betStatus === "completed" && (
@@ -218,7 +211,7 @@ export default function Bet({ bet }: { bet: Bet }) {
 
         {editing &&
           tempBetState.betStatus === "completed" &&
-          betState.betStatus != "completed" && (
+          bet.betStatus != "completed" && (
             <p>
               Profit/Loss: {""}
               <select
@@ -273,7 +266,10 @@ export default function Bet({ bet }: { bet: Bet }) {
             onClick={() => {
               setEditing(false);
               setTempBetState({
-                ...betState,
+                potentialWinnings: bet.potentialWinnings,
+                profitOrLoss: bet.profitOrLoss,
+                betOutcome: bet.betOutcome,
+                betStatus: bet.betStatus,
               });
             }}
           >
