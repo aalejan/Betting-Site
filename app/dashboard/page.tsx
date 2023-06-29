@@ -40,42 +40,40 @@ export default function BetsDashboard() {
     setFilteredBets(newFilteredBets);
   };
 
-  if (error) return <div>Error loading bets</div>;
-  if (!filteredBets) return <div>Loading...</div>;
-
   return (
     <>
-      <div className='flex justify-around p-2'>
-        <button
-          className='btn-primary rounded-md p-2'
-          onClick={() => filterBets("win")}
-        >
-          Won
-        </button>
-        <button
-          className='btn-primary rounded-md p-2'
-          onClick={() => filterBets("loss")}
-        >
-          Lost
-        </button>
-        <button
-          className='btn-primary rounded-md p-2'
-          onClick={() => filterBets("in_progress")}
-        >
-          In Progress
-        </button>
-        <button
-          className='btn-primary rounded-md p-2'
-          onClick={() => setFilteredBets(bets)}
-        >
-          All
-        </button>
-      </div>
+      {Array.isArray(filteredBets) && (
+        <div className='flex justify-center space-x-4 p-2 mb-1'>
+          <button
+            className='btn-primary rounded-md p-2'
+            onClick={() => filterBets("win")}
+          >
+            Won
+          </button>
+          <button
+            className='btn-primary rounded-md p-2'
+            onClick={() => filterBets("loss")}
+          >
+            Lost
+          </button>
+          <button
+            className='btn-primary rounded-md p-2'
+            onClick={() => filterBets("in_progress")}
+          >
+            In Progress
+          </button>
+          <button
+            className='btn-primary rounded-md p-2'
+            onClick={() => setFilteredBets(bets)}
+          >
+            All
+          </button>
+        </div>
+      )}
 
       <div className='flex flex-col lg:flex-row xl:flex-row items-center lg:items-start xl:items-start flex-wrap justify-center gap-3'>
-        {filteredBets.map((bet) => (
-          <BetComponent key={bet.id} bet={bet} />
-        ))}
+        {Array.isArray(filteredBets) &&
+          filteredBets.map((bet) => <BetComponent key={bet.id} bet={bet} />)}
       </div>
     </>
   );
