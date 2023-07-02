@@ -6,7 +6,7 @@ const fetchData = async (id: string) => {
   if (id) {
     try {
       const response = await fetch(
-        `https://api.the-odds-api.com/v4/sports/${id}/odds/?apiKey=${process.env.NEXT_PUBLIC_ODDS_API_KEY}&regions=us&markets=h2h,spreads&oddsFormat=american`,
+        `${process.env.NEXTAUTH_URL}/api/proxy/${id}`,
         {
           next: { revalidate: 28800 },
         }
