@@ -5,9 +5,12 @@ const fetchData = async (id: string) => {
   console.log(id);
   if (id) {
     try {
-      const response = await fetch(`${process.env.DEV_URL}/api/proxy/${id}`, {
-        next: { revalidate: 28800 },
-      });
+      const response = await fetch(
+        `https://api.the-odds-api.com/v4/sports/${id}/odds/?apiKey=${process.env.NEXT_PUBLIC_ODDS_API_KEY}&regions=us&markets=h2h,spreads&oddsFormat=american`,
+        {
+          next: { revalidate: 28800 },
+        }
+      );
 
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
