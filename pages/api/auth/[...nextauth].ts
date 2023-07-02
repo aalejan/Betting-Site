@@ -12,6 +12,7 @@ export const authOptions: NextAuthOptions = {
     }),
   ],
   adapter: PrismaAdapter(prisma),
+  secret: process.env.NEXTAUTH_SECRET,
   callbacks: {
     // This function runs when creating a new session
     async session({ session, token, user }) {
