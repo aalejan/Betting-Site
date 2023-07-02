@@ -39,8 +39,6 @@ export default function BetForm() {
       betOutcome: (event.target as HTMLFormElement)["betOutcome"]?.value, // Add this line
     };
 
-    console.log(data);
-
     const JSONdata = JSON.stringify(data);
 
     const endpoint = "/api/betCreation";
@@ -54,7 +52,7 @@ export default function BetForm() {
     };
 
     const response = await fetch(endpoint, options);
-    console.log(response);
+
     if (response.status === 403) {
       return router.push("/api/auth/signin");
     }
