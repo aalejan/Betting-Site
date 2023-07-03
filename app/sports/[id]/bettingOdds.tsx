@@ -1,37 +1,25 @@
 "use client";
-
+import useSWR from "swr";
 import OddComponent from "@/app/components/Odds";
-import { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 
-const fetchData = async (id: string) => {
-  if (id) {
-    try {
-      const response = await fetch(
-        `${process.env.NEXTAUTH_URL}/api/proxy/${id}`
-      );
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-
-      const data = await response.json();
-      console.log(data);
-      return data;
-    } catch (error) {
-      console.log(error);
-
-      return null;
-    }
+const fetcher = async (url: string) => {
+  const response = await fetch(url);
+  if (!response.ok) {
+    throw new Error(`HTTP error! status: ${response.status}`);
   }
+  const data = await response.json();
+  return data;
 };
 
 export default function BettingOddsPage() {
   const searchParams = useSearchParams();
   const search = searchParams.get("id");
 
-  const [oddsData, setData] = useState([]);
-  const [isLoading, setLoading] = useState(false);
+  const { data: oddsData, error } = useSWR(`/api/proxy/${search}`, fetcher);
+
+  const isLoading = !oddsData && !error;
+
   const sportsbooks = [
     "DraftKings",
     "BetMGM",
@@ -40,18 +28,12 @@ export default function BettingOddsPage() {
     "Barstool Sportsbook",
   ];
 
-  useEffect(() => {
-    setLoading(true);
-    fetch(`/api/proxy/${search}`)
-      .then((res) => res.json())
-      .then((data) => {
-        setData(data);
-        setLoading(false);
-      });
-  }, [search]);
-
   if (isLoading) {
     return <h1>Loading Data</h1>;
+  }
+
+  if (error) {
+    return <div>Error loading data: {error.message}</div>;
   }
 
   return (
