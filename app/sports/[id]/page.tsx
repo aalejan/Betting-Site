@@ -6,10 +6,7 @@ const fetchData = async (id: string) => {
   if (id) {
     try {
       const response = await fetch(
-        `${process.env.NEXTAUTH_URL}/api/proxy/${id}`,
-        {
-          next: { revalidate: 0 },
-        }
+        `${process.env.NEXTAUTH_URL}/api/proxy/${id}`
       );
 
       if (!response.ok) {
