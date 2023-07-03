@@ -11,7 +11,7 @@ export default async function handler(
   const { sport } = req.query;
 
   const response = await fetch(
-    `https://api.the-odds-api.com/v4/sports/${sport}/odds/?apiKey=${process.env.NEXT_PUBLIC_ODDS_API_KEY}&regions=us&markets=h2h,spreads&oddsFormat=american`
+    `https://api.the-odds-api.com/v4/sports/${sport}/odds/?apiKey=${process.env.NEXT_PUBLIC_PUBLISHABLE_KEY}&regions=us&markets=h2h,spreads&oddsFormat=american`
   );
 
   if (!response.ok) {
