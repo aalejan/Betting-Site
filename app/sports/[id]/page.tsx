@@ -8,7 +8,7 @@ const fetchData = async (id: string) => {
       const response = await fetch(
         `${process.env.NEXTAUTH_URL}/api/proxy/${id}`,
         {
-          next: { revalidate: 28800 },
+          next: { revalidate: 0 },
         }
       );
 
