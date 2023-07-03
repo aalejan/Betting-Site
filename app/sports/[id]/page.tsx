@@ -38,7 +38,7 @@ export default async function SportsPage({ searchParams }) {
   const oddsData: OddsData[] = await fetchData(id);
 
   // render your oddsData here
-  if (oddsData.length === 0 || oddsData === null) {
+  if (!oddsData || oddsData === null) {
     return <h1>There is no odds data</h1>;
   }
   return (
