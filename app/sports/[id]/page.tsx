@@ -18,6 +18,7 @@ const fetchData = async (id: string) => {
       return data;
     } catch (error) {
       console.log(error);
+      alert(error);
       return null;
     }
   }
