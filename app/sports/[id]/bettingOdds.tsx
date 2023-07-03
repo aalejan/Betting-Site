@@ -2,6 +2,7 @@
 
 import OddComponent from "@/app/components/Odds";
 import { useEffect, useState } from "react";
+import { useSearchParams } from "next/navigation";
 
 const fetchData = async (id: string) => {
   if (id) {
@@ -25,7 +26,10 @@ const fetchData = async (id: string) => {
   }
 };
 
-export default function BettingOddsPage({ id }) {
+export default function BettingOddsPage() {
+  const searchParams = useSearchParams();
+  const search = searchParams.get("id");
+
   const [oddsData, setData] = useState([]);
   const [isLoading, setLoading] = useState(false);
   const sportsbooks = [
@@ -38,13 +42,13 @@ export default function BettingOddsPage({ id }) {
 
   useEffect(() => {
     setLoading(true);
-    fetch(`/api/proxy/${id}`)
+    fetch(`/api/proxy/${search}`)
       .then((res) => res.json())
       .then((data) => {
         setData(data);
         setLoading(false);
       });
-  }, [id]);
+  }, [search]);
 
   if (isLoading) {
     return <h1>Loading Data</h1>;
