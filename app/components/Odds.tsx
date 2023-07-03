@@ -14,6 +14,8 @@ export default function OddComponent({
   useEffect(() => {
     setIsMounted(true);
   }, []);
+  console.log(isMounted);
+  console.log(odd);
   return (
     <>
       {isMounted && (
