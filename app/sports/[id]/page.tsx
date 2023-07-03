@@ -20,6 +20,7 @@ const fetchData = async (id: string) => {
       return data;
     } catch (error) {
       console.log(error);
+      return null;
     }
   }
 };
