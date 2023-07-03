@@ -13,7 +13,7 @@ export default async function handler(
   const response = await fetch(
     `https://api.the-odds-api.com/v4/sports/${sport}/odds/?apiKey=${process.env.NEXT_PUBLIC_PUBLISHABLE_KEY}&regions=us&markets=h2h,spreads&oddsFormat=american`
   );
-  console.log(response);
+
   if (!response.ok) {
     return res.status(response.status).json({
       message: `Error ${response.status}: ${response.statusText}`,
