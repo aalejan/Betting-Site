@@ -24,3 +24,7 @@ type Outcome = {
   price: number;
   point?: number;
 };
+
+type SearchParamType = {
+  searchParams: { id: string };
+};

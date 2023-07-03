@@ -35,7 +35,7 @@ export default async function SportsPage({ searchParams }) {
     "Barstool Sportsbook",
   ];
 
-  const oddsData: OddsData[] = await fetchData(id);
+  const oddsData: OddsData[] = await fetchData(String(id));
 
   // render your oddsData here
   if (!oddsData || oddsData === null) {
